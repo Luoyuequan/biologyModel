@@ -11,9 +11,10 @@ public class Main implements Runnable {
     public static void main(String[] args) {
         Main my = new Main();
         my.initPersonList();
-        Person person = new Person(System.currentTimeMillis(), null, null, "One");
+//        Person person = new Person(System.currentTimeMillis(), null, null, "Four");
 //        person.getPersonInfor();
-        System.out.println(JSON.toJSONString(person,true));
+//        System.out.println(JSON.toJSONString(person,true));
+//        System.out.println(JSON.toJSONString(AbstractOrganism.ecosystem,true));
         my.randomMarriage(AbstractEcosystem.ecosystem);
         my.randomBreeding(AbstractEcosystem.ecosystem);
         my.savePersonList();
@@ -65,6 +66,7 @@ public class Main implements Runnable {
                 FileInputStream fileIn = new FileInputStream(file);
                 ObjectInputStream in = new ObjectInputStream(fileIn);
                 String personListJson = in.readUTF();
+
                 AbstractEcosystem.ecosystem = JSON.parseArray(personListJson, Person.class);
                 in.close();
                 fileIn.close();
@@ -84,9 +86,10 @@ public class Main implements Runnable {
         try {
             FileOutputStream fileOut = new FileOutputStream("./personList.json");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            String personListJson = JSON.toJSONString(AbstractEcosystem.ecosystem);
-            System.out.println(personListJson);
+            String personListJson = JSON.toJSONString(AbstractEcosystem.ecosystem,true);
+//            System.out.println(personListJson);
             out.writeUTF(personListJson);
+
             out.close();
             fileOut.close();
         } catch (IOException i) {

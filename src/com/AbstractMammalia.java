@@ -33,11 +33,10 @@ abstract class AbstractMammalia<T> extends AbstractOrganism {
         } catch (NoSuchAlgorithmException e) {
             sr = new SecureRandom(); // 获取普通的安全随机数生成器
         }
-        this.setSex(sr.nextInt(2));
-        this.setFather(father);
-        this.setMother(mother);
+        this.sex = sr.nextInt(2);
+        this.father = father;
+        this.mother = mother;
     }
-
 
     AbstractMammalia() {
     }
@@ -47,7 +46,7 @@ abstract class AbstractMammalia<T> extends AbstractOrganism {
      */
     abstract void foraging();
 
-    int getSex() {
+    public int getSex() {
         return sex;
     }
 
@@ -55,31 +54,31 @@ abstract class AbstractMammalia<T> extends AbstractOrganism {
         this.sex = sex;
     }
 
-    T getFather() {
+    public T getFather() {
         return father;
-    }
-
-    T getMother() {
-        return mother;
     }
 
     public void setFather(T father) {
         this.father = father;
     }
 
+    public T getMother() {
+        return mother;
+    }
+
     public void setMother(T mother) {
         this.mother = mother;
     }
 
-    T getSpouse() {
+    public T getSpouse() {
         return spouse;
     }
 
-    void setSpouse(T spouse) {
+    public void setSpouse(T spouse) {
         this.spouse = spouse;
     }
 
-    List<T> getChildren() {
+    public List<T> getChildren() {
         return children;
     }
 

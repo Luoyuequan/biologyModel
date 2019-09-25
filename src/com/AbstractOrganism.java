@@ -15,9 +15,9 @@ abstract class AbstractOrganism extends AbstractEcosystem {
      * @param birthDateTime 出生日期
      */
     AbstractOrganism(long birthDateTime) {
-        this.setBirthDateTime(birthDateTime);
-        this.setHealth(100);
-        this.setIdCard(UUID.randomUUID().toString().replace("-", ""));
+        this.birthDateTime = birthDateTime;
+        this.health = 100;
+        this.idCard = UUID.randomUUID().toString().replace("-", "");
     }
 
     /**
@@ -37,18 +37,7 @@ abstract class AbstractOrganism extends AbstractEcosystem {
      */
     abstract void movement();
 
-    /**
-     * @return 唯一标识符 DNA
-     */
-    final String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    long getBirthDateTime() {
+    public long getBirthDateTime() {
         return birthDateTime;
     }
 
@@ -56,7 +45,7 @@ abstract class AbstractOrganism extends AbstractEcosystem {
         this.birthDateTime = birthDateTime;
     }
 
-    long getDeathDateTime() {
+    public long getDeathDateTime() {
         return deathDateTime;
     }
 
@@ -64,11 +53,19 @@ abstract class AbstractOrganism extends AbstractEcosystem {
         this.deathDateTime = deathDateTime;
     }
 
-    int getHealth() {
+    public int getHealth() {
         return health;
     }
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }

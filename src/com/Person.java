@@ -1,6 +1,7 @@
 package com;
 
 
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
@@ -8,12 +9,15 @@ import java.text.SimpleDateFormat;
 /**
  * @implNote 继承 哺乳动物抽象类 并实现
  */
-class Person extends AbstractMammalia<Person> {
+class Person extends AbstractMammalia<Person>{
+
     //    姓
     private String surname;
     //    名
     private String name;
     private int age;
+    //    0:未结婚 1:已结婚
+    private int marriageStatus;
 
     /**
      * @param birthDateTime 出生日期
@@ -29,12 +33,11 @@ class Person extends AbstractMammalia<Person> {
         } catch (NoSuchAlgorithmException e) {
             sr = new SecureRandom(); // 获取普通的安全随机数生成器
         }
-        String surname =
+        this.surname =
                 father == null && mother == null ?
                         "Yuna" + sr.nextInt(10) :
                         father != null ? father.getSurname() : mother.getSurname();
-        this.setSurname(surname);
-        this.setName(name);
+        this.name = name;
         //        加入生物集
         ecosystem.add(this);
         this.getPersonInfor();
@@ -59,27 +62,27 @@ class Person extends AbstractMammalia<Person> {
      */
     @Override
     void breeding() {
-        if (this.getSpouse() != null) {
+        if (getSpouse() != null) {
             if (getChildren().size() < 5) {
-                Person father = this.getSex() == 1 ? this : this.getSpouse();
-                Person mother = this.getSex() == 0 ? this : this.getSpouse();
-                Person child = new Person(System.currentTimeMillis(), father, mother, "Child" + this.getChildren().size());
-                this.getChildren().add(child);
-                this.getSpouse().getChildren().add(child);
+                Person father = this.getSex() == 1 ? this : getSpouse();
+                Person mother = this.getSex() == 0 ? this : getSpouse();
+                Person child = new Person(System.currentTimeMillis(), father, mother, "Child" + getChildren().size());
+                getChildren().add(child);
+                getSpouse().getChildren().add(child);
                 System.out.printf(
-                        "%s与%s繁殖成功,子代为%s\n",
-                        this.getSurnameName(), this.getSpouse().getSurnameName(), child.getSurnameName()
+                        "%s与%s繁殖成功,新生子代为%s\n",
+                        getSurnameName(), getSpouse().getSurnameName(), child.getSurnameName()
                 );
-                this.getPersonInfor();
-                this.getSpouse().getPersonInfor();
+                getPersonInfor();
+                getSpouse().getPersonInfor();
             } else {
                 System.out.printf(
                         "%s与%s的子代数量已达到%d，无法继续繁殖了!\n",
-                        this.getSurnameName(), this.getSpouse().getSurnameName(), this.getChildren().size()
+                        getSurnameName(), getSpouse().getSurnameName(), getChildren().size()
                 );
             }
         } else {
-            System.out.println(this.getSurnameName() + "暂无配偶,无法繁殖后代!");
+            System.out.println(getSurnameName() + "暂无配偶,无法繁殖后代!");
         }
 
     }
@@ -98,18 +101,40 @@ class Person extends AbstractMammalia<Person> {
      * @param spouse 配偶
      */
     void marriage(Person spouse) {
-        if (this.getSpouse() != null) {
-            System.out.printf("%s已经与%s结婚了\n", this.getSurnameName(), spouse.getSurnameName());
-        } else if (spouse == null) {
+        if (spouse != null && getSpouse() == null && spouse.getSpouse() == null) {
+            if (spouse.getSex() + getSex() == 1) {
+//                如果对象的父亲 与 自己的父亲 相等，禁止 结婚
+                if (spouse.getFather().getIdCard().equals(getFather().getIdCard())) {
+                    System.out.printf("禁止%s与%s一代近亲结婚!\n", getSurnameName(), spouse.getSurnameName());
+                } else {
+                    this.setSpouse(spouse);
+                    spouse.setSpouse(this);
+                    System.out.printf("%s与%s结婚成功!\n", this.getSurnameName(), spouse.getSurnameName());
+                    if (getMarriageStatus() != getSex() + getSpouse().getSex()) {
+                        setMarriageStatus(getSex() + getSpouse().getSex());
+                        getSpouse().setMarriageStatus(getSex() + getSpouse().getSex());
+                    }
+                    this.getPersonInfor();
+                    this.getSpouse().getPersonInfor();
+                }
+            } else if (spouse.getSex() + getSex() != 1) {
+                System.out.printf("%s与%s结婚失败,配偶必须为异性!\n", getSurnameName(), spouse.getSurnameName());
+            }
+        } else if (spouse != null) {
+            if (getSpouse() != null) {
+                System.out.printf("%s已经与%s结婚了\n", getSurnameName(), getSpouse().getSurnameName());
+            }
+            if (spouse.getSpouse() != null) {
+                System.out.printf("%s已经与%s结婚了\n", spouse.getSurnameName(), spouse.getSpouse().getSurnameName());
+            }
+//            if ()
+//            改变结婚情况
+            if (getMarriageStatus() != getSex() + getSpouse().getSex()) {
+                setMarriageStatus(getSex() + getSpouse().getSex());
+                getSpouse().setMarriageStatus(getSex() + getSpouse().getSex());
+            }
+        } else {
             System.out.println("请传入有效对象!");
-        } else if (spouse.getSex() + this.getSex() == 1) {
-            this.setSpouse(spouse);
-            spouse.setSpouse(this);
-            System.out.printf("%s与%s结婚成功!\n", this.getSurnameName(), spouse.getSurnameName());
-            this.getPersonInfor();
-            this.getSpouse().getPersonInfor();
-        } else if (spouse.getSex() + this.getSex() != 1) {
-            System.out.printf("%s与%s结婚失败,配偶必须为异性!\n", this.getSurnameName(), spouse.getSurnameName());
         }
     }
 
@@ -132,19 +157,20 @@ class Person extends AbstractMammalia<Person> {
      */
     void getPersonInfor() {
 //        System.out.println(this.birthDateTime);
-        var sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+        var sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.printf(
-                "DNA:%s,姓名: %s,出生日期:%s,死亡日期:%s,性别:%s,健康值:%d,父亲:%s,母亲:%s,配偶:%s,子代:%d个\n",
+                "DNA:%s,姓名: %s,出生日期:%s,性别:%s,婚姻情况:%s,父亲:%s,母亲:%s,配偶:%s,子代:%d个,健康值:%d,死亡日期:%s\n",
                 getIdCard(),
-                this.getSurnameName(),
+                getSurnameName(),
                 sdf.format(getBirthDateTime()),
-                sdf.format(getDeathDateTime()),
-                this.getSexToString(),
+                getSexToString(),
+                getMarriageStatusToString(),
+                getFather() == null ? "无" : getFather().getSurnameName(),
+                getMother() == null ? "无" : getMother().getSurnameName(),
+                getSpouse() == null ? "无" : getSpouse().getSurnameName(),
+                getChildren().size(),
                 getHealth(),
-                this.getFather() == null ? "无" : this.getFather().getSurnameName(),
-                this.getMother() == null ? "无" : this.getMother().getSurnameName(),
-                this.getSpouse() == null ? "无" : this.getSpouse().getSurnameName(),
-                this.getChildren().size()
+                sdf.format(getDeathDateTime())
         );
     }
 
@@ -152,26 +178,33 @@ class Person extends AbstractMammalia<Person> {
      * @return 姓名
      */
     private String getSurnameName() {
-        return this.getSurname() + "·" + this.getName();
+        return this.surname + "·" + this.name;
     }
 
     /**
      * @return 0：女，1：男
      */
     private String getSexToString() {
-        return super.getSex() == 0 ? "女♀" : "男♂";
+        return getSex() == 0 ? "女♀" : "男♂";
+    }
+
+    /**
+     * @return 0:未结婚 ，1：已结婚
+     */
+    private String getMarriageStatusToString() {
+        return getMarriageStatus() == 0 ? "未结婚" : "已结婚";
     }
 
     /**
      * 获取子代信息
      */
     void getChildrenInfor() {
-        for (Person child : this.getChildren()) {
+        for (Person child : getChildren()) {
             child.getPersonInfor();
         }
     }
 
-    private String getSurname() {
+    public String getSurname() {
         return surname;
     }
 
@@ -179,7 +212,7 @@ class Person extends AbstractMammalia<Person> {
         this.surname = surname;
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
@@ -193,5 +226,13 @@ class Person extends AbstractMammalia<Person> {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public int getMarriageStatus() {
+        return marriageStatus;
+    }
+
+    public void setMarriageStatus(int marriageStatus) {
+        this.marriageStatus = marriageStatus;
     }
 }
