@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
  * @implNote 继承 哺乳动物抽象类 并实现
  */
 class Person extends AbstractMammalia<Person>{
+//    O(∩_∩)O哈哈~master
 
     //    姓
     private String surname;
