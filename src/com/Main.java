@@ -3,12 +3,29 @@ package com;
 import com.alibaba.fastjson.JSON;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 
 public class Main implements Runnable {
     public static void main(String[] args) {
+//        // String对象:
+//        String s = "Hello world";
+//        // 获取String substring(int)方法，参数为int:
+//        Method m = null;
+//        try {
+//            m = String.class.getMethod("substring", int.class,int.class);
+//            // 在s对象上调用该方法并获取结果:
+//            String r = null;
+//            r = (String) m.invoke(s, 6,s.length());
+//            // 打印调用结果:
+//            System.out.println(r);
+//        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
+
         Main my = new Main();
         my.initPersonList();
 //        Person person = new Person(System.currentTimeMillis(), null, null, "Four");

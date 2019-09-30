@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 /**
  * @implNote 继承 哺乳动物抽象类 并实现
  */
-class Person extends AbstractMammalia<Person>{
+class Person extends AbstractMammalia<Person> {
 //    O(∩_∩)O哈哈~master
 
     //    姓
@@ -102,6 +102,8 @@ class Person extends AbstractMammalia<Person>{
      * @param spouse 配偶
      */
     void marriage(Person spouse) {
+//        两个人都未结婚，才可结婚
+//        否则结婚失败
         if (spouse != null && getSpouse() == null && spouse.getSpouse() == null) {
             if (spouse.getSex() + getSex() == 1) {
 //                如果对象的父亲 与 自己的父亲 相等，禁止 结婚
@@ -123,14 +125,15 @@ class Person extends AbstractMammalia<Person>{
             }
         } else if (spouse != null) {
             if (getSpouse() != null) {
+//                自身已结婚
                 System.out.printf("%s已经与%s结婚了\n", getSurnameName(), getSpouse().getSurnameName());
-            }
-            if (spouse.getSpouse() != null) {
+            } else if (spouse.getSpouse() != null) {
+//                对方已结婚
                 System.out.printf("%s已经与%s结婚了\n", spouse.getSurnameName(), spouse.getSpouse().getSurnameName());
             }
-//            if ()
+            System.out.printf("%s不能与%s结婚\n", getSurnameName(), spouse.getSurnameName());
 //            改变结婚情况
-            if (getMarriageStatus() != getSex() + getSpouse().getSex()) {
+            if (getSpouse() != null && getMarriageStatus() != getSex() + getSpouse().getSex()) {
                 setMarriageStatus(getSex() + getSpouse().getSex());
                 getSpouse().setMarriageStatus(getSex() + getSpouse().getSex());
             }
