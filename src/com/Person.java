@@ -127,7 +127,8 @@ class Person extends AbstractMammalia<Person> {
             if (getSpouse() != null) {
 //                自身已结婚
                 System.out.printf("%s已经与%s结婚了\n", getSurnameName(), getSpouse().getSurnameName());
-            } else if (spouse.getSpouse() != null) {
+            }
+            if (spouse.getSpouse() != null) {
 //                对方已结婚
                 System.out.printf("%s已经与%s结婚了\n", spouse.getSurnameName(), spouse.getSpouse().getSurnameName());
             }
