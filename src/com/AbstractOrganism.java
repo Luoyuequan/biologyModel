@@ -4,8 +4,10 @@ import java.util.UUID;
 
 /**
  * 生物抽象类
+ *
+ * @author luoyuequan
  */
-abstract class AbstractOrganism extends AbstractEcosystem {
+public abstract class AbstractOrganism extends AbstractEcosystem {
     private long birthDateTime;
     private long deathDateTime;
     private int health;

@@ -3,8 +3,6 @@ package com;
 import com.alibaba.fastjson.JSON;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
@@ -103,7 +101,7 @@ public class Main implements Runnable {
         try {
             FileOutputStream fileOut = new FileOutputStream("./personList.json");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            String personListJson = JSON.toJSONString(AbstractEcosystem.ecosystem,true);
+            String personListJson = JSON.toJSONString(AbstractEcosystem.ecosystem, true);
 //            System.out.println(personListJson);
             out.writeUTF(personListJson);
 

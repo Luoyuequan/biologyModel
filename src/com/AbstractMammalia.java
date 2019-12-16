@@ -2,15 +2,17 @@ package com;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * 哺乳动物抽象类
  *
  * @param <T> 子类
+ * @author luoyuequan
  */
-abstract class AbstractMammalia<T> extends AbstractOrganism {
+public abstract class AbstractMammalia<T> extends AbstractOrganism {
     //            0:母 1:公
     private int sex;
     private T father;
