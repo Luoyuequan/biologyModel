@@ -106,7 +106,7 @@ class Person extends AbstractMammalia<Person> {
         if (spouse != null && getSpouse() == null && spouse.getSpouse() == null) {
             if (spouse.getSex() + getSex() == 1) {
 //                如果对象的父亲 与 自己的父亲 相等，禁止 结婚
-                if (spouse.getFather().getIdCard().equals(getFather().getIdCard())) {
+                if (getFather() != null && spouse.getFather() != null && spouse.getFather().getIdCard().equals(getFather().getIdCard())) {
                     System.out.printf("禁止%s与%s一代近亲结婚!\n", getSurnameName(), spouse.getSurnameName());
                 } else {
                     this.setSpouse(spouse);
@@ -126,7 +126,8 @@ class Person extends AbstractMammalia<Person> {
             if (getSpouse() != null) {
 //                自身已结婚
                 System.out.printf("%s已经与%s结婚了\n", getSurnameName(), getSpouse().getSurnameName());
-            } else if (spouse.getSpouse() != null) {
+            }
+            if (spouse.getSpouse() != null) {
 //                对方已结婚
                 System.out.printf("%s已经与%s结婚了\n", spouse.getSurnameName(), spouse.getSpouse().getSurnameName());
             }

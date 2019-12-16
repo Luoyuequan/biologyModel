@@ -26,7 +26,8 @@ public class Main implements Runnable {
 
         Main my = new Main();
         my.initPersonList();
-//        Person person = new Person(System.currentTimeMillis(), null, null, "Four");
+//        Person person = new Person(System.currentTimeMillis(), null, null, "Five");
+//        person.setSex(1);
 //        person.getPersonInfor();
 //        System.out.println(JSON.toJSONString(person,true));
 //        System.out.println(JSON.toJSONString(AbstractOrganism.ecosystem,true));
